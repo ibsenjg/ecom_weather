@@ -67,9 +67,23 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
+clone
+cd repo
+git submodule init
+git submodule update
+
 cd backend
+yarn || npm i
 yarn start || npm start
 
 port 5000
 
 heroku open graphql
+
+open new console
+navigate to repo root
+
+cd frontend
+
+yarn || npm i
+yarn start -o || npm start -o
