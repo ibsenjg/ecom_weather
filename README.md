@@ -6,7 +6,7 @@ https://ibsenjg.github.io/ecom_weather/
 
 https://vast-thicket-28360.herokuapp.com/graphql
 
-# server instrucions
+# server instructions
 
 - clone repo
 - navigate to repo folder
