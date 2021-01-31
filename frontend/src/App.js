@@ -1,58 +1,201 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect } from 'react';
+import { AnimateSharedLayout, AnimatePresence } from 'framer-motion';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import FetchUrl from './utils/Fetch';
+import { Header } from './components/Header';
+import { Item } from './components/Item';
+import { List } from './components/List';
+import { setCities, setCity } from './app/slices/appSlice';
 
-function App() {
+const Landing = () => {
+  const { selectedDay } = useSelector((state) => state.app);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <>
+      <List selectedId={selectedDay} />
+      <AnimatePresence>
+        {selectedDay && <Item id={selectedDay} />}
+      </AnimatePresence>
+    </>
+  );
+};
+
+const App = () => {
+  const dispatch = useDispatch();
+  const {
+    selectedCity: { _id },
+  } = useSelector((state) => state.app);
+
+  useEffect(() => {
+    (async () => {
+      const fetchCities = `
+      query {
+        cities {
+          _id
+          name
+          country
+          url
+          current {
+            _id
+            name
+            main
+            date
+            description
+            icon
+            feels
+            clouds
+            temp
+            min
+            max
+            pressure
+            humidity
+            wind
+            rain
+            uvi
+            hourly {
+              _id
+              main
+              hour
+              description
+              icon
+              feels
+              temp
+              min
+              max
+            }
+          }
+          week {
+            _id
+            name
+            main
+            date
+            description
+            icon
+            feels
+            clouds
+            temp
+            min
+            max
+            pressure
+            humidity
+            wind
+            rain
+            uvi
+            hourly {
+              _id
+              main
+              hour
+              description
+              icon
+              feels
+              temp
+              min
+              max
+            }
+          }
+        }
+      }`;
+      const allCities = await FetchUrl({
+        payload: fetchCities,
+        name: 'cities',
+      });
+      const [firstCity] = allCities;
+      dispatch(setCity(firstCity));
+      return dispatch(setCities(allCities));
+    })();
+  }, [dispatch]);
+
+  //Each minute will update the selected and current item, and it will refresh
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const updateCurrentCity = `
+    mutation {
+      updateCity(id:"${_id}") {
+        _id
+        name
+        country
+        url
+        current {
+          _id
+          name
+          main
+          date
+          description
+          icon
+          feels
+          clouds
+          temp
+          min
+          max
+          pressure
+          humidity
+          wind
+          rain
+          uvi
+          hourly {
+            _id
+            main
+            hour
+            description
+            icon
+            feels
+            temp
+            min
+            max
+          }
+        }
+        week {
+          _id
+          name
+          main
+          date
+          description
+          icon
+          feels
+          clouds
+          temp
+          min
+          max
+          pressure
+          humidity
+          wind
+          rain
+          uvi
+          hourly {
+            _id
+            main
+            hour
+            description
+            icon
+            feels
+            temp
+            min
+            max
+          }
+        }
+      }
+    }`;
+      const updatedCity = await FetchUrl({
+        payload: updateCurrentCity,
+        name: 'updateCity',
+      });
+      dispatch(setCity(updatedCity));
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [_id, dispatch]);
+
+  return (
+    <div className='container'>
+      <AnimateSharedLayout type='crossfade'>
+        <Header />
+        <BrowserRouter>
+          <Route path={['/:id', '/']} component={Landing} />
+        </BrowserRouter>
+      </AnimateSharedLayout>
     </div>
   );
-}
+};
 
 export default App;
