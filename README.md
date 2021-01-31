@@ -1,49 +1,117 @@
+# GITHUB PAGES Frontend deploy
+
 https://ibsenjg.github.io/ecom_weather/
+
+# HEROKU Backend deploy
+
 https://vast-thicket-28360.herokuapp.com/graphql
 
-clone
-cd repo
+# server instrucions
+
+- clone repo
+- navigate to repo folder
+
+```
+cd <repo_folder>
+```
+
+- install git sub module.
+
+```
 git submodule init
 git submodule update
+```
 
+- navigate to backend folder
+
+```
 cd backend
+```
+
+- install dependencies with:
+
+```
 yarn || npm i
-yarn start || npm start
-
-watch out the port when running locally
-
-heroku open graphql
-
-deploy to heroku
-
-navigate to backend folder
-
-```
-navigate to repo root
-
-cd backend
 ```
 
-add files
-commit
+- start server (watch out the port when running locally)
+
+```
+ yarn start || npm start
+
+- or maybe you want to see it running on heroku
+
+ heroku open graphql
+```
+
+# Heroku deploy instructions
+
+- navigate to repo root, then go to backend folder
+
+- add files and commit your changes
+
+```
+git add .
+git commit -m "Feat <new_feature>"
+```
+
+- push to heroku repo (it will deploy automatically)
+
+```
 git push heroku master
+```
 
-open new console
-
-navigate to frontend folder
+- open heroku live project
 
 ```
-navigate to repo root
+ heroku open graphql
+```
 
+# Frontend instructions
+
+- open new console
+- navigate to repo root, then go to frontend folder
+
+```
 cd frontend
 ```
 
+- install dependencies with:
+
+```
 yarn || npm i
-yarn start -o || npm start -o
+```
 
-deploy to gh-pages
+- start server
 
-must be on frontend folder or..
-navigate to repo root
-cd frontend
+```
+ yarn start -o || npm start -o
+```
+
+# Gh-pages deploy instructions
+
+- navitate to frontend folder
+- create a fresh build using
+
+```
+yarn predeploy
+```
+
+- add all and commit your changes
+
+```
+git add .
+git commit -m "Feat <new_build>"
+```
+
+- push your changes to github
+
+```
+git push
+```
+
+- now you can update the gh-pages branch using
+
+```
 yarn deploy
+```
