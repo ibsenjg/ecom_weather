@@ -10,21 +10,33 @@ cd backend
 yarn || npm i
 yarn start || npm start
 
-port 5000
+watch out the port when running locally
 
 heroku open graphql
 
 deploy to heroku
 
 navigate to backend folder
+
+```
+navigate to repo root
+
+cd backend
+```
+
 add files
 commit
 git push heroku master
 
 open new console
+
+navigate to frontend folder
+
+```
 navigate to repo root
 
 cd frontend
+```
 
 yarn || npm i
 yarn start -o || npm start -o
